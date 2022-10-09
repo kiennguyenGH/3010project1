@@ -10,38 +10,41 @@ public class GaussianElimination
 
     public static double[][] getMatrix()
     {
-        Scanner input = new Scanner(System.in);
+        Scanner scan = new Scanner(System.in);
         int matrixSize = 0;
         while (matrixSize < 1 || matrixSize > 10)
         {
             System.out.println("How many rows is the matrix? (max 10)");
-            matrixSize = input.nextInt();
+            matrixSize = scan.nextInt();
+            scan.nextLine();
             if (matrixSize < 1 || matrixSize > 10)
             {
                 System.out.println("Invalid input");
             }
+            
         }
         double[][] rows = new double[matrixSize][matrixSize + 1];
         for (int i = 0; i < rows.length; i++)
         {
             String rowInput = "";
             System.out.println("Enter the coefficients for row " + (i + 1) + " (separated by spaces)");
-            rowInput = input.nextLine();
+            rowInput = scan.nextLine();
             String[] splitTest = rowInput.split("\\s+");
-            do
+            while (splitTest.length != matrixSize + 1)
             {
+                System.out.println("Invalid input");
                 System.out.println("Enter the coefficients for row " + (i + 1) + " (separated by spaces)");
-                rowInput = input.nextLine();
-                splitTest = rowInput.split("\\s+"); 
+                rowInput = scan.nextLine();
+                splitTest = rowInput.split("\\s+");
             }
-            while (splitTest.length != matrixSize + 1);
+            
             for (int k = 0; k < splitTest.length; k++)
             {
                 rows[i][k] = Double.parseDouble(splitTest[k]);
             }
         }
 
-        input.close();
+        scan.close();
         return rows;
     }
 
@@ -54,12 +57,13 @@ public class GaussianElimination
        {
             System.out.println("Enter:\n1. To input the equations\n2. To read from a file");
             theInput = input.nextInt();
+            input.nextLine();
             if (theInput != 1 && theInput != 2)
             {
                 System.out.println("Invalid input");
             }
        }
-       input.close();
+       
        
        //Get user rows
        if (theInput == 1)
@@ -81,6 +85,6 @@ public class GaussianElimination
        {
 
        }
-
+       input.close();
     }
 }
