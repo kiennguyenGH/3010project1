@@ -182,11 +182,11 @@ public class GaussianElimination
             printMatrix(theMatrix);
             System.out.println();
 
-            for (int k = 0; k < multipliers.length; k++)
+            for (int k = 1; k < multipliers.length + 1; k++)
             {
                 for (int j = i; j < theMatrix[0].length; j++)
                 {
-                    theMatrix[k + i + 1][j] = theMatrix[k + i + 1][j] - (multipliers[k] * theMatrix[i][j]);
+                    theMatrix[k + i][j] = theMatrix[k + i][j] - (multipliers[k-1] * theMatrix[i][j]);
                 }
             }
             System.out.println("After elimination: ");
