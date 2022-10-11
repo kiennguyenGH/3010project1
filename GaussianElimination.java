@@ -1,6 +1,10 @@
 import java.util.Scanner;
 import java.lang.Math;
 
+// Kien Nguyen
+// CS 3010.03-1
+
+
 public class GaussianElimination
 {
 
@@ -155,6 +159,7 @@ public class GaussianElimination
         }
         for (int i = 0; i < matrix.length-1; i++)
         {
+            System.out.println("Current matrix: ");
             printMatrix(theMatrix);
             System.out.println();
             scales = getColumn(theMatrix, i);
@@ -194,6 +199,22 @@ public class GaussianElimination
             System.out.println();
 
         }
+
+        //Back Substitution
+        double[] answers = new double[theMatrix.length];
+        // answers[0] = theMatrix[theMatrix.length-1][theMatrix[0].length-1]/theMatrix[theMatrix.length-1][theMatrix[0].length-2];
+        // System.out.println(answers[0]);
+        int count = 0;
+        for (int i = theMatrix.length-1; i >= 0; i--)
+        {
+            for (int j = 0; j < count; j++)
+            {
+                theMatrix[i][theMatrix[0].length-1] -= (answers[j] * theMatrix[i][theMatrix[0].length-count-1]);
+            }
+            answers[count] = theMatrix[i][theMatrix[0].length-1]/theMatrix[i][i];
+            count++;
+        }
+        printScales(answers);
         // printMatrix(theMatrix);
     }
 
@@ -262,8 +283,9 @@ public class GaussianElimination
             computeGaussian(test);
             
             
-        //Read file
+        
        }
+       //Read file
        else
        {
 
