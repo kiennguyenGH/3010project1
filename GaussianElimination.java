@@ -1,5 +1,7 @@
 import java.util.Scanner;
 import java.lang.Math;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 // Kien Nguyen
 // CS 3010.03-1
@@ -298,6 +300,35 @@ public class GaussianElimination
        //Read file
        else
        {
+            System.out.println("Enter the name of the file: ");
+            String fileName = input.nextLine();
+            double[][] test;
+            try {
+                File file = new File(fileName);
+                Scanner fileReader = new Scanner(file);
+                String[] array = fileReader.nextLine().split("\\s+");
+                test = new double[array.length-1][array.length];
+                int count = 0;
+                for (int i = 0; i < array.length; i++)
+                {
+                    test[count][i] = Double.parseDouble(array[i]);
+                }
+                count++;
+                while(fileReader.hasNextLine())
+                {
+                    array = fileReader.nextLine().split("\\s+");
+                    for (int i = 0; i < array.length; i++)
+                    {
+                        test[count][i] = Double.parseDouble(array[i]);
+                    }
+                    count++;
+                }
+                computeGaussian(test);
+                fileReader.close();
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found.");
+            }
+            
 
        }
        input.close();
