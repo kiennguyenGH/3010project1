@@ -216,10 +216,15 @@ public class GaussianElimination
                 // theMatrix[i][theMatrix[0].length-1] -= (answers[j] * theMatrix[i][theMatrix[0].length-count-1]);
             }
             answers[count] = theMatrix[i][theMatrix[0].length-1]/theMatrix[i][i];
-            System.out.println("Answer " + answers[count]);
+            // System.out.println("Answer " + answers[count]);
             count++;
         }
-        printScales(answers);
+        count = 1;
+        for (int i = answers.length -1; i >= 0; i--)
+        {
+            System.out.println("x" + count + ": " + answers[i]);
+            count++;
+        }
         // printMatrix(theMatrix);
     }
 
