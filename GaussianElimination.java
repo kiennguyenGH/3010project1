@@ -164,7 +164,7 @@ public class GaussianElimination
             printScales(scales);
             System.out.println();
             pivotRow = findLargestIndex(scales);
-            System.out.println("Pivot row:\n" + pivotRow + "\n");
+            System.out.println("Pivot row:\n" + (pivotRow + i + 1) + "\n");
 
             //Move pivot row to top
             scales = swapArray(scales, 0, pivotRow);
