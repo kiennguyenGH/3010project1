@@ -17,14 +17,67 @@ public class GaussianElimination
         return largest;
     }
 
+    public static double[] multiplyArray(double[] array, double multiplier)
+    {
+        double[] multArray = new double[array.length];
+        for (int i = 0; i < array.length; i++)
+        {
+            multArray[i] = array[i] * multiplier;
+        }
+        return multArray;
+    }
+
+    public static double[] removeFirstIndex(double[] array)
+    {
+        double[] theArray = new double[array.length-1];
+        for (int i = 0; i < theArray.length; i++)
+        {
+            theArray[i] = array[i + 1];
+        }
+        return theArray;
+    }
+
+    public static int findLargestIndex(double[] row)
+    {
+        int largest = 0;
+        for (int i = 0; i < row.length; i++)
+        {
+            if (row[i] > row[largest])
+            {
+                largest = i;
+            }
+        }
+        return largest;
+    }
+
     public static double[] getColumn(double[][] matrix, int column)
     {
-        double[] theColumn = new double[matrix.length];
+        double[] theColumn = new double[matrix.length-column];
         for (int i = 0; i < theColumn.length; i++)
         {
-            theColumn[i] = matrix[i][column];
+            theColumn[i] = matrix[i + column][column];
         }
         return theColumn;
+    }
+
+    public static double[] prepMultiplier(double[][] matrix, int column)
+    {
+        double[] theColumn = new double[matrix.length-(column+1)];
+        for (int i = 0; i < theColumn.length; i++)
+        {
+            theColumn[i] = matrix[i + column + 1][column];
+        }
+        return theColumn;
+    }
+
+
+    public static double[] swapArray(double[] array, int index1, int index2)
+    {
+        double[] theArray = array;
+        double temp = array[index1];
+        theArray[index1] = theArray[index2];
+        theArray[index2] = temp;
+        return theArray;
     }
 
     public static double[][] swapRows(double[][] matrix, int row1, int row2)
@@ -47,6 +100,26 @@ public class GaussianElimination
         return array;
     }
 
+    public static double[] divideArrayAbs(double[] row, double[] scale)
+    {
+        double[] array = new double[row.length];
+        for (int i = 0; i < array.length; i++)
+        {
+            array[i] = Math.abs(row[i]/scale[i]);
+        }
+        return array;
+    }
+
+    public static double[] divideArray(double[] row, double num)
+    {
+        double[] array = new double[row.length];
+        for (int i = 0; i < array.length; i++)
+        {
+            array[i] = row[i]/num;
+        }
+        return array;
+    }
+
     public static void printMatrix(double[][] matrix)
     {
         for (int i = 0; i < matrix.length; i++)
@@ -55,8 +128,9 @@ public class GaussianElimination
             {
                 System.out.print(matrix[i][k] + " ");
             }
+            System.out.println();
         }
-        System.out.println();
+        
     }
 
     public static void printScales(double[] vector)
@@ -71,8 +145,6 @@ public class GaussianElimination
     public static void computeGaussian(double[][] matrix)
     {
         int pivotRow = 0;
-        double divideValue = 0;
-        int[] indices = new int[matrix[0].length-1];
         double[] multipliers = new double[matrix.length];
         double[] scales;
         double[] largestValues = new double[matrix.length];
@@ -81,10 +153,48 @@ public class GaussianElimination
         {
             largestValues[i] = findLargest(matrix[i]);
         }
-        for (int i = 0; i < matrix[0].length-1; i++)
+        for (int i = 0; i < matrix.length-1; i++)
         {
+            printMatrix(theMatrix);
+            System.out.println();
+            scales = getColumn(theMatrix, i);
+            //Get Ratios
+            scales = divideArrayAbs(scales, largestValues);
+            System.out.println("Scaled ratios: ");
+            printScales(scales);
+            System.out.println();
+            pivotRow = findLargestIndex(scales);
+            System.out.println("Pivot row:\n" + pivotRow + "\n");
+
+            //Move pivot row to top
+            scales = swapArray(scales, 0, pivotRow);
+            theMatrix = swapRows(theMatrix, i, pivotRow + i);
+            largestValues = swapArray(largestValues, 0, pivotRow);
+            largestValues = removeFirstIndex(largestValues);
+            //Elimination
+            multipliers = divideArray(prepMultiplier(theMatrix, i), theMatrix[i][i]);
+            System.out.println("Multipliers: ");
+            printScales(multipliers);
+            System.out.println();
+
+
+            System.out.println("Before elimination: ");
+            printMatrix(theMatrix);
+            System.out.println();
+
+            for (int k = 0; k < multipliers.length; k++)
+            {
+                for (int j = i; j < theMatrix[0].length; j++)
+                {
+                    theMatrix[k + i + 1][j] = theMatrix[k + i + 1][j] - (multipliers[k] * theMatrix[i][j]);
+                }
+            }
+            System.out.println("After elimination: ");
+            printMatrix(theMatrix);
+            System.out.println();
 
         }
+        // printMatrix(theMatrix);
     }
 
     public static double[][] getMatrix()
@@ -116,6 +226,7 @@ public class GaussianElimination
                 rowInput = scan.nextLine();
                 splitTest = rowInput.split("\\s+");
             }
+            System.out.println();
             
             for (int k = 0; k < splitTest.length; k++)
             {
@@ -142,7 +253,7 @@ public class GaussianElimination
                 System.out.println("Invalid input");
             }
        }
-       
+       System.out.println();
        
        //Get user matrix
        if (theInput == 1)
